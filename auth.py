@@ -35,22 +35,15 @@ class Session:
                 configs = json.load(f)
                 self.app_configs = configs
             config = {}
-            if app_name:
-                if app_name in self.app_configs:
-                    config = self.app_configs[app_name]
-                else:
-                    raise ValueError(f"错误：提供的应用名称 '{app_name}' 不在预设配置中。")
-            else:
+            if not app_name:
                 # 输出所有可选配置项
-                
-                if not app_name:
-                    print("【当前支持的系统列表】")
-                    print(", ".join([i for i in self.app_configs]))
-                    app_name = input("请输入需要登录的系统: ")
-                if app_name in self.app_configs:
-                    config = self.app_configs[app_name]
-                else:
-                    raise ValueError(f"错误：提供的应用名称 '{app_name}' 不在预设配置中。")
+                print("【当前支持的系统列表】")
+                print(", ".join([i for i in self.app_configs]))
+                app_name = input("请输入需要登录的系统: ")
+            if app_name in self.app_configs:
+                config = self.app_configs[app_name]
+            else:
+                raise ValueError(f"错误：提供的应用名称 '{app_name}' 不在预设配置中。")
             self._initialize_session(config)
         except FileNotFoundError:
             raise FileNotFoundError(f"错误：配置文件 '{self.CONFIG_FILE}' 未找到。请确保它与脚本在同一目录下。")
@@ -383,9 +376,9 @@ class Session:
             return False # 登录失败
 
 if __name__ == "__main__":
-    session = Session()
+    session = Session(app_name=None)
     try:
-        if session.login(app_name=None):
+        if session.login():
             print(session.process_post_login())
     except Exception as e:
         print(f"\n程序运行出错: {e}")
