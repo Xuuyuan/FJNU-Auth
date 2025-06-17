@@ -56,20 +56,6 @@
     "response_type": "code",
     "state": "1234"
   },
-  "积极心理体验空间预约": {
-    "app_id": "10222",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.jjxltykjyy.jjxltykjyy%2526appload%253D0%2526f%253Dapp",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "智慧学工一站式平台": {
-    "app_id": "10210",
-    "redirect_uri": "https://stucas.fjnu.edu.cn/proxy-oauth2-cas/h5Login?service=https%3A%2F%2Fstucas.fjnu.edu.cn%2Fcas%2Flogin%3Fservice%3Dhttps%253A%252F%252Fstusuperapp.fjnu.edu.cn%252F",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
   "智慧迎新移动端": {
     "app_id": "10219",
     "redirect_uri": "https://stuworkapp.fjnu.edu.cn/api/newcapec-custom/v1/openApi/oauth/fustar/yxAppLogin",
@@ -112,13 +98,6 @@
     "response_type": "code",
     "state": "1234"
   },
-  "待办中心（新）": {
-    "app_id": "10175",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%3A%2F%2Fywtb.fjnu.edu.cn%2Fsopplus%2F_web%2Fcustomized%2Ftaskcenter%2Fapp%2Ftaskcenter.html",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
   "一网通办": {
     "app_id": "10174",
     "redirect_uri": "https://ywtb.fjnu.edu.cn/callback",
@@ -147,65 +126,9 @@
     "response_type": "code",
     "state": "1234"
   },
-  "调适体育课申请": {
-    "app_id": "10114",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.tstyksq.tstyksq%2526appload%253D0%2526f%253Dapp",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
   "考生考试信息查询（招生与考试办公室）": {
     "app_id": "10033",
     "redirect_uri": "https://school.app.fjnu.edu.cn/studerExam/m/#/selectStudent",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "流程跟踪": {
-    "app_id": "10019",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fsopplus%252F_web%252Fcustomized%252FmyBusiness%252Fapp%252FmyBusiness.html%253Ftab%253D2",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "办结流程": {
-    "app_id": "10020",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fsopplus%252F_web%252Fcustomized%252FmyBusiness%252Fapp%252FmyBusiness.html%253Ftab%253D3",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "已办事项": {
-    "app_id": "10018",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fsopplus%252F_web%252Fcustomized%252FmyBusiness%252Fapp%252FmyBusiness.html%253Ftab%253D1",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "待办事项": {
-    "app_id": "10017",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fsopplus%252F_web%252Fcustomized%252FmyBusiness%252Fapp%252FmyBusiness.html%253Ftab%253D0",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "免监考班级申请": {
-    "app_id": "640",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.mjkbjsq.mjkbjsq%2526appload%253D0%2526f%253Dapp",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "学生证补发申请": {
-    "app_id": "632",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.xszbfsq.xszbfsq%2526appload%253D0%2526f%253Dapp",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "举办群众性(学生)活动场地申请": {
-    "app_id": "628",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.jbqzxhdcdsq.jbqzxhdcdsq%2526appload%253D0%2526f%253Dapp",
     "scope": "user_info",
     "response_type": "code",
     "state": "1234"
@@ -308,13 +231,6 @@
     "response_type": "code",
     "state": "1234"
   },
-  "CARSI资源共享": {
-    "app_id": "10041",
-    "redirect_uri": "https://ds.carsi.edu.cn/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.fjnu.edu.cn%2Fidp%2Fshibboleth&target=https%3A%2F%2Fds.carsi.edu.cn%2Fwxds",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
   "综合考评查询": {
     "app_id": "284",
     "redirect_uri": "https://school.app.fjnu.edu.cn/stuwork-appweb/zongh",
@@ -353,20 +269,6 @@
   "大型仪器共享": {
     "app_id": "638",
     "redirect_uri": "https://dygx.fjnu.edu.cn/lfsms/user/oauthcallback",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "心理咨询预约": {
-    "app_id": "631",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.xlzxfwsq.xlzxfwsq%2526appload%253D0%2526f%253Dapp",
-    "scope": "user_info",
-    "response_type": "code",
-    "state": "1234"
-  },
-  "学生节假日集体外出活动申请": {
-    "app_id": "630",
-    "redirect_uri": "https://ywtb.fjnu.edu.cn/callback?service=https%253A%252F%252Fywtb.fjnu.edu.cn%252Fdefault%252Fbase%252Fworkflow%252Fstart.jsp%253Fprocess%253Dcom.sudytech.work.xsjjrjtwcsq.xsjjrjtwcsq%2526appload%253D0%2526f%253Dapp",
     "scope": "user_info",
     "response_type": "code",
     "state": "1234"
