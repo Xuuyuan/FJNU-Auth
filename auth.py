@@ -5,18 +5,21 @@ import time
 
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
+from pathlib import Path
 
 class Session:
     BASE_URL = "https://org.app.fjnu.edu.cn/openplatform"
     HEADERS = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     }
-    CONFIG_FILE = 'config.json'
 
     def __init__(self, app_name: str = None):
         """初始化会话状态"""
         self.req_session = requests.Session()
         self.req_session.headers.update(self.HEADERS)
+        
+        script_dir = Path(__file__).parent
+        self.CONFIG_FILE = script_dir / 'config.json'
         
         # 登录流程的状态
         self.qrcode_uuid = ""      # 用于二维码登录的唯一标识
