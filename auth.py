@@ -41,7 +41,16 @@ class Session:
                 else:
                     raise ValueError(f"错误：提供的应用名称 '{app_name}' 不在预设配置中。")
             else:
-                config = self.app_configs["智慧师大服务大厅"]
+                # 输出所有可选配置项
+                
+                if not app_name:
+                    print("【当前支持的系统列表】")
+                    print(", ".join([i for i in self.app_configs]))
+                    app_name = input("请输入需要登录的系统: ")
+                if app_name in self.app_configs:
+                    config = self.app_configs[app_name]
+                else:
+                    raise ValueError(f"错误：提供的应用名称 '{app_name}' 不在预设配置中。")
             self._initialize_session(config)
         except FileNotFoundError:
             raise FileNotFoundError(f"错误：配置文件 '{self.CONFIG_FILE}' 未找到。请确保它与脚本在同一目录下。")
@@ -105,7 +114,7 @@ class Session:
     # --- 二维码登录方法 ---
     def get_qrcode(self) -> bytes:
         """
-        获取二维码，对应JS中的 qrcode 函数
+        获取二维码
         :return: base64解码后的二维码图片字节
         """
         url = f"{self.BASE_URL}/g/qrcode/getQRCode"
@@ -117,7 +126,7 @@ class Session:
 
     def check_qrcode(self) -> int:
         """
-        轮询检查二维码状态，对应JS中的 getQrCodeStatus
+        轮询检查二维码状态
         :return: 状态码 (0:过期, 1:待扫描, 2:已扫描, 3:已确认)
         """
         url = f"{self.BASE_URL}/g/qrcode/getQrCodeStatus"
@@ -141,7 +150,7 @@ class Session:
     # --- 账号密码登录方法 ---
     def get_jcaptcha(self) -> bytes:
         """
-        获取图形验证码，对应JS中的 initImg
+        获取图形验证码
         :return: base64解码后的验证码图片字节
         """
         url = f"{self.BASE_URL}/g/admin/getJcaptchaCode"
@@ -151,7 +160,7 @@ class Session:
 
     def _get_public_key(self) -> str:
         """
-        获取用于加密密码的RSA公钥，对应JS中的 getPublicKey
+        获取用于加密密码的RSA公钥
         """
         if self.public_key:
             return self.public_key
@@ -163,7 +172,7 @@ class Session:
 
     def _encrypt_password(self, password: str) -> str:
         """
-        使用公钥对密码进行RSA加密，对应JS中的 encrypt
+        使用公钥对密码进行RSA加密
         """
         public_key_str = self._get_public_key()
         key_der = base64.b64decode(public_key_str)
@@ -174,7 +183,7 @@ class Session:
 
     def login_by_password(self, username: str, password: str, jcaptcha_code: str) -> bool:
         """
-        通过账号密码登录，对应JS中的 accountLogin
+        通过账号密码登录
         :return: True表示登录成功或进入二步验证，False表示失败
         """
         url = f"{self.BASE_URL}/g/admin/login"
@@ -205,7 +214,7 @@ class Session:
     # --- 短信/二步验证方法 ---
     def send_sms_code(self, phone: str):
         """
-        发送短信验证码，对应JS中的 getCode 和 getCode2
+        发送短信验证码
         """
         url = f"{self.BASE_URL}/g/admin/sendVeriCode"
         payload = {
@@ -217,7 +226,7 @@ class Session:
 
     def login_by_sms(self, phone: str, code: str) -> bool:
         """
-        通过短信验证码登录，对应JS中的 smsLogin
+        通过短信验证码登录
         """
         url = f"{self.BASE_URL}/g/admin/login"
         payload = {
@@ -234,7 +243,7 @@ class Session:
 
     def login_by_2fa(self, code: str) -> bool:
         """
-        执行二步验证登录，对应JS中的 smsLogin2
+        执行二步验证登录
         """
         url = f"{self.BASE_URL}/g/admin/login"
         payload = {
@@ -256,7 +265,6 @@ class Session:
     def get_member_identities(self) -> list:
         """
         登录成功后，使用verifyToken获取用户可用的身份列表。
-        对应JS中的 getMemberIdentitys 函数。
         
         :return: 一个包含身份信息的列表，例如 [{'sno': '123', 'name': '学生'}, ...]
         """
@@ -275,7 +283,6 @@ class Session:
     def get_redirect_url(self, sno: str) -> str:
         """
         根据指定的身份sno，获取最终的应用重定向链接。
-        对应JS中的 redirectUrl 函数。
         
         :param sno: 从身份列表中选择的sno编号。
         :return: 最终的应用URL链接。
@@ -376,9 +383,9 @@ class Session:
             return False # 登录失败
 
 if __name__ == "__main__":
-    session = Session("教务处质量评价")
+    session = Session()
     try:
-        if session.login():
+        if session.login(app_name=None):
             print(session.process_post_login())
     except Exception as e:
         print(f"\n程序运行出错: {e}")
