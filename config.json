@@ -1,0 +1,16 @@
+{
+  "智慧师大服务大厅": {
+    "app_id": "324",
+    "redirect_uri": "https://school.app.fjnu.edu.cn/inte-service-platform-hall-schoolweb/redirectUrl/",
+    "scope": "user_info",
+    "response_type": "code",
+    "state": "1234"
+  },
+  "教务处质量评价": {
+    "app_id": "10016",
+    "redirect_uri": "https://jwczlpj.fjnu.edu.cn/app/callBackUserInfo",
+    "scope": "user_info",
+    "response_type": "code",
+    "state": "1234"
+  }
+}
