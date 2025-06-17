@@ -2,8 +2,6 @@ import requests
 import json
 import base64
 import time
-from io import BytesIO
-from PIL import Image
 
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
@@ -293,109 +291,94 @@ class Session:
         response = self.req_session.get(url, params=params)
         redirect_url = self._handle_response(response, "获取重定向链接")
         return redirect_url
-    
-def show_image_from_bytes(image_bytes: bytes):
-    """辅助函数：从字节数据打开并显示图片"""
-    try:
-        img = Image.open(BytesIO(image_bytes))
-        img.show()
-    except Exception as e:
-        print(f"无法显示图片: {e}。请检查您是否安装了Pillow库和系统图片查看器。")
 
-def process_post_login(session: Session):
-    """
-    登录成功后的统一处理函数：获取身份并获取最终链接。
-    """
-    try:
-        identities = session.get_member_identities()
-        if not identities:
-            print("未找到可用身份。")
-            return
-
-        chosen_sno = ""
-        if len(identities) == 1: # 仅一个可用身份
-            chosen_sno = identities[0].get('sno')
-        else:
-            try:
-                choice = int(input("请选择一个身份（输入序号）: ")) - 1
-                if 0 <= choice < len(identities):
-                    chosen_sno = identities[choice].get('sno')
-                else:
-                    print("无效选择。")
-                    return
-            except ValueError:
-                print("输入无效，请输入数字。")
+    def process_post_login(self) -> str:
+        """
+        获取身份并获取最终链接。
+        """
+        try:
+            identities = self.get_member_identities()
+            if not identities:
+                print("未找到可用身份。")
                 return
 
-        if chosen_sno:
-            redirect_url = session.get_redirect_url(chosen_sno)
-            print(f"URL: {redirect_url}")
-    except Exception as e:
-        print(f"处理登录后流程时出错: {e}")
+            chosen_sno = ""
+            if len(identities) == 1: # 仅一个可用身份
+                chosen_sno = identities[0].get('sno')
+            else:
+                try:
+                    choice = int(input("请选择一个身份（输入序号）: ")) - 1
+                    if 0 <= choice < len(identities):
+                        chosen_sno = identities[choice].get('sno')
+                    else:
+                        print("无效选择。")
+                        return
+                except ValueError:
+                    print("输入无效，请输入数字。")
+                    return
+            if chosen_sno:
+                redirect_url = self.get_redirect_url(chosen_sno)
+                return redirect_url
+        except Exception as e:
+            print(f"处理登录后流程时出错: {e}")
+
+    def login(self) -> bool:
+        login_type = input("请选择登录方式 (1: 二维码, 2: 账号密码, 其它任意值: 短信验证码): ")
+            
+        if login_type == '1': # 二维码登录
+            qrcode_bytes = self.get_qrcode()
+            with open("qrcode.png", "wb") as f: f.write(qrcode_bytes)
+            print('登录二维码已保存至 qrcode.png！')
+            
+            for i in range(60):
+                status = self.check_qrcode()
+                if status == 0: print("二维码已过期，请重新获取。"); return False
+                elif status == 1: print("等待扫描二维码...")
+                elif status == 2: print("已扫描二维码，请确认登录...");
+                elif status == 3:
+                    print("已确认登录，正在登录...")
+                    if self.login_by_qrcode():
+                        print('登录成功！')
+                        return True
+                time.sleep(2)
+            print('登录失败！')
+            return False # 超时未确认登录
+        elif login_type == '2': # 账号密码登录
+            jcaptcha_bytes = self.get_jcaptcha()
+            with open("jcaptcha.png", "wb") as f: f.write(jcaptcha_bytes)
+            print('图形验证码已保存至 jcaptcha.png！')
+            
+            username = input("请输入账号: ")
+            password = input("请输入密码: ")
+            jcaptcha_code = input("请输入图形验证码: ")
+
+            if self.login_by_password(username, password, jcaptcha_code):
+                if self.double_verify_number: # 如果需要2FA
+                    print(f"正在请求向手机 {self.double_verify_number} 发送验证码...")
+                    self.send_sms_code(self.double_verify_number)
+                    sms_code_2fa = input(f"请输入发送到 {self.double_verify_number} 的短信验证码: ")
+                    if self.login_by_2fa(sms_code_2fa):
+                        print('登录成功！')
+                        return True
+                else:
+                    print(f"登录成功！")
+                    return True
+            print('登录失败！')
+            return False # 登录失败
+        else: # 短信登录
+            phone = input("请输入手机号: ")
+            self.send_sms_code(phone)
+            sms_code = input(f"请输入发送到 {phone} 的短信验证码: ")
+            if self.login_by_sms(phone, sms_code):
+                print(f"登录成功！")
+                return True
+            print('登录失败！')
+            return False # 登录失败
 
 if __name__ == "__main__":
     session = Session("教务处质量评价")
     try:
-        while True:
-            login_type = input("请选择登录方式 (1: 二维码, 2: 账号密码, 3: 短信验证码, q: 退出): ")
-            
-            if login_type == '1': # 二维码登录
-                qrcode_bytes = session.get_qrcode()
-                with open("qrcode.png", "wb") as f: f.write(qrcode_bytes)
-                show_image_from_bytes(qrcode_bytes)
-                print('登录二维码已保存至 qrcode.png 并已尝试自动打开！')
-                
-                for i in range(60): # 轮询2分钟
-                    status = session.check_qrcode()
-                    if status == 0: print("二维码已过期，请重新获取。"); break
-                    elif status == 1: print("等待扫描...")
-                    elif status == 2: print("已扫描，请在手机上确认...");
-                    elif status == 3:
-                        print("已确认，正在登录...")
-                        if session.login_by_qrcode():
-                            login_successful = True
-                            print(f"登录成功! TokenKey: {session.tokenKey[:15]}...")
-                        break
-                    time.sleep(2)
-                break
-            elif login_type == '2': # 账号密码登录
-                jcaptcha_bytes = session.get_jcaptcha()
-                with open("jcaptcha.png", "wb") as f: f.write(jcaptcha_bytes)
-                show_image_from_bytes(jcaptcha_bytes)
-                print('图形验证码已保存至 jcaptcha.png 并已尝试自动打开！')
-                
-                username = input("请输入账号: ")
-                password = input("请输入密码: ")
-                jcaptcha_code = input("请输入图形验证码: ")
-
-                if session.login_by_password(username, password, jcaptcha_code):
-                    if session.double_verify_number: # 如果需要2FA
-                        print(f"正在请求向手机 {session.double_verify_number} 发送验证码...")
-                        session.send_sms_code(session.double_verify_number)
-                        sms_code_2fa = input(f"请输入发送到 {session.double_verify_number} 的短信验证码: ")
-                        if session.login_by_2fa(sms_code_2fa):
-                            login_successful = True
-                            print(f"二步验证登录成功! TokenKey: {session.tokenKey[:15]}...")
-                    else:
-                        login_successful = True
-                        print(f"登录成功! TokenKey: {session.tokenKey[:15]}...")
-                break
-            elif login_type == '3': # 短信登录
-                phone = input("请输入手机号: ")
-                session.send_sms_code(phone)
-                sms_code = input(f"请输入发送到 {phone} 的短信验证码: ")
-                if session.login_by_sms(phone, sms_code):
-                    login_successful = True
-                    print(f"短信登录成功! TokenKey: {session.tokenKey[:15]}...")
-                break
-            elif login_type.lower() == 'q':
-                print("退出程序。")
-                break
-            else:
-                print("无效的输入，请重新选择。")
-            
-        if login_successful:
-            process_post_login(session)
-
+        if session.login():
+            print(session.process_post_login())
     except Exception as e:
         print(f"\n程序运行出错: {e}")
